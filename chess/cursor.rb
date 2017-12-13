@@ -45,7 +45,7 @@ class Cursor
     handle_key(key)
   end
 
-  private
+  # private
 
   def read_char
     STDIN.echo = false # stops the console from printing return values
@@ -78,21 +78,36 @@ class Cursor
 
   def handle_key(key)
     case key
+
     when :return
+      if board.start_pos.nil?
+        board.start_pos = @cursor_pos
+      elsif board.end_pos.nil?
+        board.end_pos = @cursor_pos
+        board.move_piece(board.start_pos, board.end_pos)
+      end
+
+      puts board.grid
+
       @cursor_pos
     when :space
       @cursor_pos
     when :left
-      update_pos(MOVES[:left])
+      diff = [MOVES[:left][0] + @cursor_pos[0], MOVES[:left][1] + @cursor_pos[1]]
+      update_pos(diff)
+
       return nil
     when :right
-      update_pos(MOVES[:right])
+      diff = [MOVES[:right][0] + @cursor_pos[0], MOVES[:right][1] + @cursor_pos[1]]
+      update_pos(diff)
       return nil
     when :up
-      update_pos(MOVES[:up])
+      diff = [MOVES[:up][0] + @cursor_pos[0], MOVES[:up][1] + @cursor_pos[1]]
+      update_pos(diff)
       return nil
     when :down
-      update_pos(MOVES[:down])
+      diff = [MOVES[:down][0] + @cursor_pos[0], MOVES[:down][1] + @cursor_pos[1]]
+      update_pos(diff)
       return nil
     when :ctrl_c
       Process.exit(0)
